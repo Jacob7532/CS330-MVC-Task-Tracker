@@ -1,5 +1,5 @@
 // /src/controllers/TaskController.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskModel from '../models/TaskModel';
 import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
@@ -7,6 +7,15 @@ import TaskList from '../components/TaskList';
 const TaskController = () => {
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(null);
+
+    useEffect(() => {
+        const storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        setTasks(storedTasks);
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }, [tasks]);
 
     const handleAddTask = (newTask) => {
         const taskInstance = new TaskModel(
